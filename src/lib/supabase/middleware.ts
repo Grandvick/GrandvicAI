@@ -50,6 +50,7 @@ export async function updateSession(request: NextRequest) {
   const isPublicAsset =
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api/health") ||
+    pathname.startsWith("/api/webhooks/whatsapp") ||
     pathname === "/favicon.ico";
 
   if (!user && !isAuthRoute && !isPublicAsset && pathname !== "/") {
