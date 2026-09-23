@@ -109,10 +109,32 @@ export async function getLead(supabase: SupabaseClient, id: string): Promise<Lea
   return mapLead(data as unknown as LeadRow);
 }
 
+/**
+ * The customer's most recent active lead, if any (Phase 4 spec section 5 —
+ * "do not create duplicate leads for every message"). Used by the
+ * `create_lead` AI tool to reuse an existing lead instead of creating a new
+ * one every time a returning customer messages again.
+ */
+export async function findActiveLeadForCustomer(
+  supabase: SupabaseClient,
+  customerId: string
+): Promise<LeadListItem | null> {
+  const { data, error } = await supabase
+    .from("leads")
+    .select(LEAD_SELECT)
+    .eq("customer_id", customerId)
+    .eq("is_active", true)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? mapLead(data as unknown as LeadRow) : null;
+}
+
 export async function createLead(
   supabase: SupabaseClient,
   businessId: string,
-  createdBy: string,
+  createdBy: string | null,
   input: LeadInput
 ): Promise<string> {
   const { data, error } = await supabase
@@ -144,6 +166,8 @@ export async function createLead(
   await logActivity(supabase, {
     businessId,
     actorId: createdBy,
+    // Phase 5F — see the identical comment in customers.ts's createCustomer.
+    actorType: createdBy === null ? "system" : "user",
     action: "lead.created",
     objectType: "lead",
     objectId: leadId,
@@ -166,7 +190,7 @@ export async function createLead(
 export async function updateLeadPipeline(
   supabase: SupabaseClient,
   leadId: string,
-  updatedBy: string,
+  updatedBy: string | null,
   changes: {
     stage?: string;
     score?: number;
@@ -208,6 +232,8 @@ export async function updateLeadPipeline(
   await logActivity(supabase, {
     businessId,
     actorId: updatedBy,
+    // Phase 5F — see the identical comment in customers.ts's createCustomer.
+    actorType: updatedBy === null ? "system" : "user",
     action: "lead.updated",
     objectType: "lead",
     objectId: leadId,
@@ -225,7 +251,7 @@ export async function updateLeadPipeline(
 export async function addLeadNote(
   supabase: SupabaseClient,
   leadId: string,
-  createdBy: string,
+  createdBy: string | null,
   note: string
 ): Promise<void> {
   await logLeadEvent(supabase, { leadId, eventType: "note_added", payload: { note }, createdBy });

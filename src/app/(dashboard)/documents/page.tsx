@@ -66,9 +66,10 @@ export default async function DocumentsPage({
 
       <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-4 text-xs text-slate-400">
         Files are stored in a private Supabase Storage bucket and only ever accessed through
-        short-lived signed links (never a permanent public URL). AI-assisted &ldquo;looks
-        complete&rdquo; checks and job-specific document requirements arrive with the Jobs
-        Module (Phase 2) — a human always makes the approve/reject decision here.
+        short-lived signed links (never a permanent public URL). A document linked to a job
+        application counts toward that job&rsquo;s required-documents checklist (see the
+        application&rsquo;s detail page) — a human always makes the approve/reject decision here,
+        never an automated &ldquo;looks complete&rdquo; check.
       </div>
     </div>
   );

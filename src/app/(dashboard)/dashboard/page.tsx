@@ -1,6 +1,14 @@
+import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getDashboardOverview } from "@/lib/business/dashboard";
 import { StatCard } from "@/components/dashboard/StatCard";
+import { env } from "@/lib/config";
+
+const DASHBOARD_AI_PROMPTS = [
+  "Give me today's business summary.",
+  "Show me my hot leads.",
+  "Which applicants are missing documents?",
+];
 
 export default async function DashboardPage() {
   const supabase = await createSupabaseServerClient();
@@ -58,6 +66,38 @@ export default async function DashboardPage() {
           </ul>
         )}
       </div>
+
+      {env.hasOpenAI && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-900 text-[10px] text-white">
+                  AI
+                </span>
+                Ask Grandvic AI
+              </h2>
+              <p className="mt-1 text-xs text-slate-500">
+                Get real answers from your business data — no invented numbers.
+              </p>
+            </div>
+            <Link href="/ai" className="shrink-0 text-sm font-medium text-slate-700 hover:underline">
+              Open →
+            </Link>
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {DASHBOARD_AI_PROMPTS.map((p) => (
+              <Link
+                key={p}
+                href={`/ai?q=${encodeURIComponent(p)}`}
+                className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-100"
+              >
+                {p}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-500">
         This is the Phase 0 foundation dashboard — it reads real numbers from your database

@@ -7,7 +7,7 @@ import { listPipelineStages } from "@/lib/business/pipeline-stages";
 import { listStaff } from "@/lib/business/staff";
 import { listTasks } from "@/lib/business/tasks";
 import { listApplications } from "@/lib/business/applications";
-import { Badge, temperatureTone, statusTone } from "@/components/ui/badge";
+import { Badge, temperatureTone, statusTone, formatStatusLabel } from "@/components/ui/badge";
 import { updateLeadPipelineAction, addLeadNoteAction } from "../actions";
 import { PipelineEditor } from "./PipelineEditor";
 import { NoteForm } from "./NoteForm";
@@ -162,8 +162,10 @@ export default async function LeadDetailPage({ params }: PageProps<"/leads/[id]"
                     key={a.id}
                     className="flex items-center justify-between rounded-lg border border-slate-100 px-3 py-2 text-sm"
                   >
-                    <span className="text-slate-900">{a.opportunityTitle || "General application"}</span>
-                    <Badge tone={statusTone(a.status)}>{a.status.replace("_", " ")}</Badge>
+                    <Link href={`/applications/${a.id}`} className="text-slate-900 hover:underline">
+                      {a.opportunityTitle || "General application"}
+                    </Link>
+                    <Badge tone={statusTone(a.status)}>{formatStatusLabel(a.status)}</Badge>
                   </li>
                 ))}
               </ul>

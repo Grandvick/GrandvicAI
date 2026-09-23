@@ -2,16 +2,27 @@
 
 import { useState, useTransition } from "react";
 import { updateApplicationStatusAction } from "./actions";
+import { formatStatusLabel } from "@/components/ui/badge";
 
 const OPTIONS = [
-  "draft",
-  "submitted",
-  "under_review",
-  "interview",
-  "accepted",
+  "new",
+  "screening",
+  "documents_pending",
+  "documents_complete",
+  "shortlisted",
+  "submitted_to_recruiter",
+  "interview_scheduled",
+  "interview_completed",
+  "selected",
+  "offer_received",
+  "visa_processing",
+  "deployment_pending",
+  "placed",
   "rejected",
   "withdrawn",
 ] as const;
+
+const REASON_REQUIRED = new Set(["rejected", "withdrawn"]);
 
 export function StatusSelect({ applicationId, status }: { applicationId: string; status: string }) {
   const [value, setValue] = useState(status);
@@ -20,10 +31,18 @@ export function StatusSelect({ applicationId, status }: { applicationId: string;
 
   function onChange(next: string) {
     const previous = value;
+
+    let reason: string | undefined;
+    if (REASON_REQUIRED.has(next)) {
+      const entered = window.prompt(`Optional: reason for marking this ${next.replace("_", " ")}`);
+      if (entered === null) return; // user cancelled the prompt — leave status unchanged
+      reason = entered.trim() || undefined;
+    }
+
     setValue(next);
     setError(null);
     startTransition(async () => {
-      const result = await updateApplicationStatusAction(applicationId, next);
+      const result = await updateApplicationStatusAction(applicationId, next, reason);
       if (result?.error) {
         setError(result.error);
         setValue(previous);
@@ -41,7 +60,7 @@ export function StatusSelect({ applicationId, status }: { applicationId: string;
       >
         {OPTIONS.map((o) => (
           <option key={o} value={o}>
-            {o.replace("_", " ")}
+            {formatStatusLabel(o)}
           </option>
         ))}
       </select>

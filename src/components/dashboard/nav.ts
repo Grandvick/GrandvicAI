@@ -25,7 +25,7 @@ export const navSections: { title?: string; items: NavItem[] }[] = [
   },
   {
     items: [
-      { href: "/jobs", label: "Jobs", icon: "💼", comingInPhase: 2 },
+      { href: "/jobs", label: "Jobs", icon: "💼" },
       { href: "/applications", label: "Applications", icon: "📄" },
       { href: "/documents", label: "Documents", icon: "📁" },
     ],
@@ -43,7 +43,7 @@ export const navSections: { title?: string; items: NavItem[] }[] = [
     ],
   },
   {
-    items: [{ href: "/ai", label: "AI Command Centre", icon: "🤖", comingInPhase: 3 }],
+    items: [{ href: "/ai", label: "AI Command Centre", icon: "🤖" }],
   },
   {
     items: [{ href: "/settings", label: "Settings", icon: "⚙️" }],

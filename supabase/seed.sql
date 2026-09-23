@@ -69,13 +69,23 @@ cross join (values
 where m.business_id = '00000000-0000-0000-0000-000000000001' and m.key = 'jobs_abroad'
 on conflict (business_id, module_id, key) do nothing;
 
--- 3. Demo opportunity (FICTIONAL) ------------------------------------------
+-- 3. Demo job opportunities (FICTIONAL) --------------------------------------
+-- Phase 2 fields: employer/recruiter, employment terms, benefit flags,
+-- structured requirements, and expiry_at (the automatic-expiry field —
+-- application_deadline is the candidate-facing deadline, expiry_at is the
+-- harder system cutoff; see src/lib/business/jobs.ts).
 
 insert into public.opportunities (
-  id, business_id, module_id, title, country, location, employer, industry,
-  positions_count, contract_duration, salary_amount, salary_currency,
-  accommodation, meals, working_hours, requirements, documents_required,
-  application_process, fees, opening_date, closing_date, status, source,
+  id, business_id, module_id, title, country, city, employer, category,
+  recruiter_name, num_vacancies, employment_type, contract_duration,
+  salary_amount, salary_currency, salary_period,
+  accommodation, accommodation_provided, meals, meals_provided,
+  transport_provided, airfare_provided, visa_work_permit_support,
+  working_hours, requirements, education_requirement, experience_requirement,
+  language_requirement, passport_required, medical_requirement,
+  job_description, responsibilities, candidate_requirements, benefits,
+  application_process, fees, recruiter_reference,
+  opening_date, application_deadline, expiry_at, status, source,
   last_verified_at, notes
 )
 select
@@ -83,30 +93,67 @@ select
   '00000000-0000-0000-0000-000000000001',
   m.id,
   '[DEMO] Registered Nurse — Luxembourg',
-  'Luxembourg',
-  'Luxembourg City',
+  'Luxembourg', 'Luxembourg City',
+  '[DEMO] Sample Healthcare Group', 'Healthcare',
   '[DEMO] Sample Healthcare Recruiter Ltd',
-  'Healthcare',
-  5,
-  '2 years, renewable',
-  2400,
-  'EUR',
-  'Provided',
-  'Not included',
+  5, 'full_time', '2 years, renewable',
+  2400, 'EUR', 'monthly',
+  'Employer-provided shared apartment near the hospital.', true,
+  'Not included', false,
+  false, true, true,
   '40 hours/week',
   array['Registered Nurse qualification', 'Minimum 2 years experience', 'Valid passport'],
-  array['passport', 'cv', 'academic_certificates', 'good_conduct_certificate'],
+  'Registered Nurse qualification (or equivalent, recognized in Luxembourg)',
+  'Minimum 2 years post-qualification experience',
+  'Conversational English; French or German a plus', true,
+  'Pre-departure medical clearance required',
+  'Provide direct patient care on a general medical ward in a mid-sized Luxembourg hospital.',
+  'Patient assessment, medication administration, care planning, handover documentation.',
+  'Registered Nurse qualification, 2+ years experience, valid passport, clean good-conduct record.',
+  'Housing provided, airfare provided, visa/work permit support, relocation orientation.',
   'Submit CV and certificates, pass assessment interview, employer confirms offer.',
   'Processing fee applies — see current fee schedule in Settings before quoting a customer.',
-  current_date - interval '10 days',
-  current_date + interval '20 days',
-  'open',
-  'demo_seed',
+  'REF-DEMO-101',
+  current_date - interval '10 days', current_date + interval '20 days', now() + interval '20 days',
+  'open', 'demo_seed',
   now(),
   'DEMO DATA — replace or delete before going live. Fees and salary are illustrative only.'
 from public.business_modules m
 where m.business_id = '00000000-0000-0000-0000-000000000001' and m.key = 'jobs_abroad'
 on conflict (id) do nothing;
+
+insert into public.opportunities (
+  id, business_id, module_id, title, country, city, employer, category,
+  num_vacancies, employment_type, contract_duration, salary_amount, salary_currency, salary_period,
+  status, source, opening_date, application_deadline, notes
+)
+select
+  '00000000-0000-0000-0000-000000000102',
+  '00000000-0000-0000-0000-000000000001',
+  m.id,
+  '[DEMO] Hospitality Supervisor — Qatar',
+  'Qatar', 'Doha',
+  '[DEMO] Sample Hospitality Group', 'Hospitality',
+  2, 'contract', '1 year, renewable', 1600, 'USD', 'monthly',
+  'paused', 'demo_seed',
+  current_date - interval '40 days', current_date + interval '5 days',
+  'DEMO DATA — kept paused on purpose to exercise the Jobs list status filter.'
+from public.business_modules m
+where m.business_id = '00000000-0000-0000-0000-000000000001' and m.key = 'jobs_abroad'
+on conflict (id) do nothing;
+
+insert into public.document_requirements (business_id, module_id, opportunity_id, document_type, is_mandatory, notes)
+select '00000000-0000-0000-0000-000000000001', m.id, '00000000-0000-0000-0000-000000000101', doc.document_type, doc.is_mandatory, null
+from public.business_modules m,
+  (values
+    ('passport', true),
+    ('cv', true),
+    ('academic_certificates', true),
+    ('good_conduct_certificate', true),
+    ('medical_certificate', false)
+  ) as doc(document_type, is_mandatory)
+where m.business_id = '00000000-0000-0000-0000-000000000001' and m.key = 'jobs_abroad'
+on conflict (opportunity_id, document_type) do nothing;
 
 -- 4. Demo customers + leads (FICTIONAL) -------------------------------------
 

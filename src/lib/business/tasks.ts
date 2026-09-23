@@ -62,7 +62,7 @@ export async function listTasks(
 export async function createTask(
   supabase: SupabaseClient,
   businessId: string,
-  ownerId: string,
+  ownerId: string | null,
   input: TaskInput
 ): Promise<string> {
   const { data, error } = await supabase
@@ -88,6 +88,8 @@ export async function createTask(
   await logActivity(supabase, {
     businessId,
     actorId: ownerId,
+    // Phase 5F — see the identical comment in customers.ts's createCustomer.
+    actorType: ownerId === null ? "system" : "user",
     action: "task.created",
     objectType: "task",
     objectId: data.id as string,

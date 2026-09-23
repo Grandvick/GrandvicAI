@@ -39,24 +39,24 @@ export default async function ApplicationsPage({
           <table className="w-full text-left text-sm">
             <thead className="border-b border-slate-100 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
               <tr>
-                <th className="px-4 py-3">Customer</th>
-                <th className="px-4 py-3">Opportunity</th>
-                <th className="px-4 py-3">Submitted</th>
-                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Candidate</th>
+                <th className="px-4 py-3">Job</th>
+                <th className="px-4 py-3">Applied</th>
+                <th className="px-4 py-3">Stage</th>
               </tr>
             </thead>
             <tbody>
               {applications.map((a) => (
                 <tr key={a.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50">
                   <td className="px-4 py-3 font-medium text-slate-900">
-                    <Link href={`/customers/${a.customerId}`} className="hover:underline">
+                    <Link href={`/applications/${a.id}`} className="hover:underline">
                       {a.customerName}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{a.opportunityTitle || "General application"}</td>
                   <td className="px-4 py-3 text-slate-600">
-                    {a.submittedAt ? new Date(a.submittedAt).toLocaleDateString() : "—"}
+                    {a.opportunityTitle || "General application"}
                   </td>
+                  <td className="px-4 py-3 text-slate-600">{new Date(a.createdAt).toLocaleDateString()}</td>
                   <td className="px-4 py-3">
                     <StatusSelect applicationId={a.id} status={a.status} />
                   </td>
@@ -65,11 +65,6 @@ export default async function ApplicationsPage({
             </tbody>
           </table>
         )}
-      </div>
-
-      <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-4 text-xs text-slate-400">
-        This is basic status tracking only. Full application-to-opportunity matching, job expiry
-        handling, and requirement checklists arrive with the Jobs Module (Phase 2).
       </div>
     </div>
   );

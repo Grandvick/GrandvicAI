@@ -5,7 +5,10 @@ import {
   leadNoteSchema,
   taskSchema,
   applicationSchema,
+  applicationStatusChangeSchema,
   documentRequestSchema,
+  jobSchema,
+  jobDocumentRequirementSchema,
 } from "./validation";
 
 const CUSTOMER_ID = "11111111-1111-4111-8111-111111111111";
@@ -82,15 +85,105 @@ describe("taskSchema", () => {
 });
 
 describe("applicationSchema", () => {
-  it("requires a customer and defaults status to draft", () => {
+  it("requires a customer and defaults status to new", () => {
     expect(applicationSchema.safeParse({}).success).toBe(false);
-    expect(applicationSchema.parse({ customerId: CUSTOMER_ID }).status).toBe("draft");
+    expect(applicationSchema.parse({ customerId: CUSTOMER_ID }).status).toBe("new");
   });
 
   it("rejects an unrecognized status", () => {
     expect(applicationSchema.safeParse({ customerId: CUSTOMER_ID, status: "ghosted" }).success).toBe(
       false
     );
+  });
+
+  it("accepts every Phase 2 recruitment pipeline stage (spec section 9)", () => {
+    const stages = [
+      "new",
+      "screening",
+      "documents_pending",
+      "documents_complete",
+      "shortlisted",
+      "submitted_to_recruiter",
+      "interview_scheduled",
+      "interview_completed",
+      "selected",
+      "offer_received",
+      "visa_processing",
+      "deployment_pending",
+      "placed",
+      "rejected",
+      "withdrawn",
+    ];
+    for (const status of stages) {
+      expect(applicationSchema.safeParse({ customerId: CUSTOMER_ID, status }).success).toBe(true);
+    }
+  });
+
+  it("accepts an optional rejection reason", () => {
+    const result = applicationSchema.safeParse({
+      customerId: CUSTOMER_ID,
+      status: "rejected",
+      rejectionReason: "Did not meet the experience requirement.",
+    });
+    expect(result.success).toBe(true);
+  });
+});
+
+describe("applicationStatusChangeSchema", () => {
+  it("requires a valid application id and status", () => {
+    expect(
+      applicationStatusChangeSchema.safeParse({ applicationId: CUSTOMER_ID, status: "shortlisted" }).success
+    ).toBe(true);
+    expect(applicationStatusChangeSchema.safeParse({ applicationId: "not-a-uuid", status: "new" }).success).toBe(
+      false
+    );
+  });
+});
+
+describe("jobSchema", () => {
+  it("accepts a minimal job with just a title", () => {
+    const result = jobSchema.safeParse({ title: "Registered Nurse — Germany" });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      // Booleans default sensibly even when omitted from the form.
+      expect(result.data.passportRequired).toBe(true);
+      expect(result.data.accommodationProvided).toBe(false);
+    }
+  });
+
+  it("rejects a title that's too short", () => {
+    expect(jobSchema.safeParse({ title: "A" }).success).toBe(false);
+  });
+
+  it("rejects an invalid employment type or salary period", () => {
+    expect(jobSchema.safeParse({ title: "Nurse", employmentType: "whenever" }).success).toBe(false);
+    expect(jobSchema.safeParse({ title: "Nurse", salaryPeriod: "biannual" }).success).toBe(false);
+  });
+
+  it("coerces numeric fields from form-data strings", () => {
+    const result = jobSchema.safeParse({ title: "Nurse", numVacancies: "5", salaryAmount: "2400" });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.numVacancies).toBe(5);
+      expect(result.data.salaryAmount).toBe(2400);
+    }
+  });
+});
+
+describe("jobDocumentRequirementSchema", () => {
+  it("requires a job id and a document type of at least 2 characters", () => {
+    expect(
+      jobDocumentRequirementSchema.safeParse({ opportunityId: CUSTOMER_ID, documentType: "cv" }).success
+    ).toBe(true);
+    expect(
+      jobDocumentRequirementSchema.safeParse({ opportunityId: CUSTOMER_ID, documentType: "x" }).success
+    ).toBe(false);
+  });
+
+  it("defaults isMandatory to true", () => {
+    const result = jobDocumentRequirementSchema.safeParse({ opportunityId: CUSTOMER_ID, documentType: "passport" });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.isMandatory).toBe(true);
   });
 });
 

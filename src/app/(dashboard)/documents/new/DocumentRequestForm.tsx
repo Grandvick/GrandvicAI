@@ -11,11 +11,13 @@ export function DocumentRequestForm({
   action,
   customers,
   lockedCustomer,
+  applicationId,
   submitLabel,
 }: {
   action: (state: FormState, formData: FormData) => Promise<FormState>;
   customers: Option[];
   lockedCustomer?: Option;
+  applicationId?: string;
   submitLabel: string;
 }) {
   const [state, formAction, pending] = useActionState(action, undefined);
@@ -25,6 +27,7 @@ export function DocumentRequestForm({
       {state?.error && (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
       )}
+      {applicationId && <input type="hidden" name="applicationId" value={applicationId} />}
       <Field label="Customer" htmlFor="customerId" required error={state?.fieldErrors?.customerId}>
         {lockedCustomer ? (
           <>

@@ -13,7 +13,7 @@ function readApplicationForm(formData: FormData) {
     customerId: String(formData.get("customerId") || ""),
     leadId: String(formData.get("leadId") || ""),
     opportunityId: String(formData.get("opportunityId") || ""),
-    status: String(formData.get("status") || "draft"),
+    status: String(formData.get("status") || "new"),
     notes: String(formData.get("notes") || ""),
   };
 }
@@ -45,17 +45,19 @@ export async function createApplicationAction(_prev: FormState, formData: FormDa
 /** Called directly from the applications list's inline status dropdown (no form). */
 export async function updateApplicationStatusAction(
   applicationId: string,
-  status: ApplicationItem["status"]
+  status: ApplicationItem["status"],
+  rejectionReason?: string
 ): Promise<{ error?: string }> {
   const { supabase, user } = await requireCurrentUser();
 
   try {
-    await updateApplicationStatus(supabase, applicationId, user.userId, status);
+    await updateApplicationStatus(supabase, applicationId, user.userId, status, { rejectionReason });
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Failed to update application." };
   }
 
   revalidatePath("/applications");
+  revalidatePath(`/applications/${applicationId}`);
   return {};
 }
 

@@ -51,17 +51,46 @@ export const taskSchema = z.object({
 });
 export type TaskInput = z.infer<typeof taskSchema>;
 
+/**
+ * Recruitment pipeline stages (Phase 2 spec section 9). Kept as a single
+ * status field — see supabase/migrations/0003_jobs_abroad.sql — rather than
+ * separate screening/submission/interview/placement columns, to avoid the
+ * duplication spec section 20 warns against.
+ */
+export const applicationStatusValues = [
+  "new",
+  "screening",
+  "documents_pending",
+  "documents_complete",
+  "shortlisted",
+  "submitted_to_recruiter",
+  "interview_scheduled",
+  "interview_completed",
+  "selected",
+  "offer_received",
+  "visa_processing",
+  "deployment_pending",
+  "placed",
+  "rejected",
+  "withdrawn",
+] as const;
+
 export const applicationSchema = z.object({
   businessId: z.string().uuid().optional(),
   customerId: z.string().uuid("Pick a customer for this application."),
   leadId: z.string().uuid().optional().or(z.literal("")),
   opportunityId: z.string().uuid().optional().or(z.literal("")),
-  status: z
-    .enum(["draft", "submitted", "under_review", "interview", "accepted", "rejected", "withdrawn"])
-    .default("draft"),
+  status: z.enum(applicationStatusValues).default("new"),
+  rejectionReason: z.string().trim().max(2000).optional().or(z.literal("")),
   notes: z.string().trim().max(5000).optional().or(z.literal("")),
 });
 export type ApplicationInput = z.infer<typeof applicationSchema>;
+
+export const applicationStatusChangeSchema = z.object({
+  applicationId: z.string().uuid(),
+  status: z.enum(applicationStatusValues),
+  rejectionReason: z.string().trim().max(2000).optional().or(z.literal("")),
+});
 
 export const documentRequestSchema = z.object({
   businessId: z.string().uuid().optional(),
@@ -77,3 +106,74 @@ export const documentStatusSchema = z.object({
   status: z.enum(["requested", "uploaded", "received", "pending_review", "approved", "rejected", "expired"]),
   notes: z.string().trim().max(2000).optional().or(z.literal("")),
 });
+
+/**
+ * Jobs Abroad opportunity (Phase 2 spec section 3/6). Every field is
+ * optional except title — a recruiter should be able to save a draft job
+ * with only a title and fill in the rest incrementally, matching how the
+ * DRAFT status is used in the workflow (spec section 4).
+ */
+export const jobStatusValues = ["draft", "pending_review", "open", "paused", "closed", "expired"] as const;
+
+const optionalText = (max: number) => z.string().trim().max(max).optional().or(z.literal(""));
+const optionalDateString = z.string().trim().optional().or(z.literal(""));
+
+export const jobSchema = z.object({
+  businessId: z.string().uuid().optional(),
+  moduleId: z.string().uuid().optional().or(z.literal("")),
+  title: z.string().trim().min(2, "Give the job a title."),
+  country: optionalText(100),
+  city: optionalText(150),
+  employer: optionalText(200),
+  recruiterName: optionalText(200),
+  category: optionalText(150),
+  employmentType: z.enum(["full_time", "part_time", "contract", "temporary", "seasonal", "other"]).optional().or(z.literal("")),
+  contractDuration: optionalText(150),
+  numVacancies: z.coerce.number().int().min(0).optional(),
+  salaryAmount: z.coerce.number().min(0).optional(),
+  salaryCurrency: optionalText(10),
+  salaryPeriod: z.enum(["hourly", "daily", "weekly", "monthly", "yearly"]).optional().or(z.literal("")),
+  accommodationProvided: z.boolean().default(false),
+  accommodation: optionalText(500),
+  mealsProvided: z.boolean().default(false),
+  meals: optionalText(500),
+  transportProvided: z.boolean().default(false),
+  airfareProvided: z.boolean().default(false),
+  visaWorkPermitSupport: z.boolean().default(false),
+  workingHours: optionalText(150),
+  educationRequirement: optionalText(500),
+  experienceRequirement: optionalText(500),
+  licenseRequirement: optionalText(500),
+  languageRequirement: optionalText(500),
+  minAge: z.coerce.number().int().min(0).max(120).optional(),
+  maxAge: z.coerce.number().int().min(0).max(120).optional(),
+  genderRequirement: z.enum(["any", "male", "female"]).optional().or(z.literal("")),
+  passportRequired: z.boolean().default(true),
+  medicalRequirement: optionalText(500),
+  jobDescription: optionalText(10000),
+  responsibilities: optionalText(10000),
+  candidateRequirements: optionalText(10000),
+  benefits: optionalText(5000),
+  applicationProcess: optionalText(5000),
+  fees: optionalText(2000),
+  recruiterReference: optionalText(150),
+  openingDate: optionalDateString,
+  applicationDeadline: optionalDateString,
+  expiryAt: optionalDateString,
+  source: optionalText(150),
+  notes: optionalText(5000),
+});
+export type JobInput = z.infer<typeof jobSchema>;
+
+export const jobStatusChangeSchema = z.object({
+  jobId: z.string().uuid(),
+  status: z.enum(jobStatusValues),
+});
+
+export const jobDocumentRequirementSchema = z.object({
+  opportunityId: z.string().uuid(),
+  documentType: z.string().trim().min(2, "Say what document this is."),
+  isMandatory: z.boolean().default(true),
+  notes: optionalText(1000),
+});
+export type JobDocumentRequirementInput = z.infer<typeof jobDocumentRequirementSchema>;

@@ -21,6 +21,37 @@ type ProfileRow = {
 };
 
 /**
+ * Shared lookup behind both requireCurrentUser() (pages/Server Actions,
+ * redirects on no session) and getCurrentUserOrNull() (API route handlers,
+ * which must return a JSON 401 instead of a redirect — see that function
+ * below). Not exported; both callers below are the only entry points.
+ */
+async function loadCurrentUser(
+  supabase: SupabaseClient,
+  authUserId: string,
+  authUserEmail: string | undefined
+): Promise<CurrentUser> {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("full_name, business_id, roles:role_id (key, name)")
+    .eq("id", authUserId)
+    .maybeSingle();
+
+  const p = profile as ProfileRow | null;
+  const roleKey = p?.roles?.key ?? "owner";
+
+  return {
+    userId: authUserId,
+    email: authUserEmail ?? "",
+    fullName: p?.full_name ?? null,
+    roleKey,
+    roleName: p?.roles?.name ?? "Owner",
+    isOwner: roleKey === "owner",
+    businessId: p?.business_id ?? null,
+  };
+}
+
+/**
  * Resolves the signed-in user + their role/business scope. Used by every
  * Phase 1 server action (mutations run standalone, outside the
  * (dashboard) layout's redirect-if-signed-out guard, so each one re-checks).
@@ -42,27 +73,28 @@ export async function requireCurrentUser(): Promise<{
     redirect("/login");
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name, business_id, roles:role_id (key, name)")
-    .eq("id", user.id)
-    .maybeSingle();
+  return { supabase, user: await loadCurrentUser(supabase, user.id, user.email) };
+}
 
-  const p = profile as ProfileRow | null;
-  const roleKey = p?.roles?.key ?? "owner";
+/**
+ * Same resolution as requireCurrentUser(), but for API route handlers
+ * (e.g. src/app/api/ai/chat/route.ts) called via fetch() from client-side
+ * code rather than navigated to — a redirect() response there would just
+ * confuse a JSON-consuming caller. Returns null instead of redirecting when
+ * there is no session, so the route can return a proper 401 JSON response.
+ */
+export async function getCurrentUserOrNull(): Promise<{
+  supabase: SupabaseClient;
+  user: CurrentUser;
+} | null> {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  return {
-    supabase,
-    user: {
-      userId: user.id,
-      email: user.email ?? "",
-      fullName: p?.full_name ?? null,
-      roleKey,
-      roleName: p?.roles?.name ?? "Owner",
-      isOwner: roleKey === "owner",
-      businessId: p?.business_id ?? null,
-    },
-  };
+  if (!user) return null;
+
+  return { supabase, user: await loadCurrentUser(supabase, user.id, user.email) };
 }
 
 /**

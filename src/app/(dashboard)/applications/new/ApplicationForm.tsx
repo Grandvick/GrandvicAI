@@ -21,7 +21,7 @@ export function ApplicationForm({
   leads: Option[];
   opportunities: Option[];
   lockedCustomer?: Option;
-  defaultValues?: { leadId?: string };
+  defaultValues?: { leadId?: string; opportunityId?: string };
   submitLabel: string;
 }) {
   const [state, formAction, pending] = useActionState(action, undefined);
@@ -62,9 +62,9 @@ export function ApplicationForm({
           ))}
         </Select>
       </Field>
-      <Field label="Opportunity" htmlFor="opportunityId" hint="Optional — full job matching arrives in Phase 2">
-        <Select id="opportunityId" name="opportunityId" defaultValue="">
-          <option value="">None</option>
+      <Field label="Job" htmlFor="opportunityId" hint="Optional — links this application to a specific Jobs Abroad opportunity">
+        <Select id="opportunityId" name="opportunityId" defaultValue={defaultValues?.opportunityId ?? ""}>
+          <option value="">None (general application)</option>
           {opportunities.map((o) => (
             <option key={o.id} value={o.id}>
               {o.label}
@@ -73,12 +73,20 @@ export function ApplicationForm({
         </Select>
       </Field>
       <Field label="Status" htmlFor="status">
-        <Select id="status" name="status" defaultValue="draft">
-          <option value="draft">Draft</option>
-          <option value="submitted">Submitted</option>
-          <option value="under_review">Under review</option>
-          <option value="interview">Interview</option>
-          <option value="accepted">Accepted</option>
+        <Select id="status" name="status" defaultValue="new">
+          <option value="new">New</option>
+          <option value="screening">Screening</option>
+          <option value="documents_pending">Documents pending</option>
+          <option value="documents_complete">Documents complete</option>
+          <option value="shortlisted">Shortlisted</option>
+          <option value="submitted_to_recruiter">Submitted to recruiter</option>
+          <option value="interview_scheduled">Interview scheduled</option>
+          <option value="interview_completed">Interview completed</option>
+          <option value="selected">Selected</option>
+          <option value="offer_received">Offer received</option>
+          <option value="visa_processing">Visa processing</option>
+          <option value="deployment_pending">Deployment pending</option>
+          <option value="placed">Placed</option>
           <option value="rejected">Rejected</option>
           <option value="withdrawn">Withdrawn</option>
         </Select>

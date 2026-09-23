@@ -1,0 +1,309 @@
+GRANDVICAI — PHASE 2 THROUGH PHASE 5H TRANSFER MANIFEST
+==============================================================================
+Generated: 2026-09-22T15:10:48.537869Z
+Archive filename: grandvicai-phase2-5h-transfer.zip
+Archive path (in this cloud workspace's output area): /mnt/user-data/outputs/grandvicai-phase2-5h-transfer.zip
+Source: cloud workspace /home/claude/grandvic-ai
+Intended destination: C:\Users\Administrator\Documents\GrandvicAI
+
+1-3. GIT IDENTITY
+------------------------------------------------------------------------------
+HEAD commit hash: a6ba91eae1dbb4bf66bc797f5c3bdf0776bee3ba
+HEAD detail: a6ba91eae1dbb4bf66bc797f5c3bdf0776bee3ba Claude Sat Sep 19 18:37:29 2026 +0300 Fix 0002_documents_storage.sql: add a clear preflight check for is_owner()
+Branch: main
+Remote: none configured (git remote -v returns nothing)
+
+4. COMPLETE GIT STATUS (git status, full output, at packaging time)
+------------------------------------------------------------------------------
+On branch main
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .env.example
+	modified:   ARCHITECTURE.md
+	modified:   CHANGELOG.md
+	modified:   DEVELOPMENT_PROGRESS.md
+	modified:   README.md
+	modified:   SETUP.md
+	modified:   package-lock.json
+	modified:   package.json
+	modified:   src/app/(dashboard)/ai/page.tsx
+	modified:   src/app/(dashboard)/applications/StatusSelect.tsx
+	modified:   src/app/(dashboard)/applications/actions.ts
+	modified:   src/app/(dashboard)/applications/new/ApplicationForm.tsx
+	modified:   src/app/(dashboard)/applications/new/page.tsx
+	modified:   src/app/(dashboard)/applications/page.tsx
+	modified:   src/app/(dashboard)/customers/[id]/page.tsx
+	modified:   src/app/(dashboard)/dashboard/page.tsx
+	modified:   src/app/(dashboard)/documents/new/DocumentRequestForm.tsx
+	modified:   src/app/(dashboard)/documents/new/page.tsx
+	modified:   src/app/(dashboard)/documents/page.tsx
+	modified:   src/app/(dashboard)/inbox/page.tsx
+	modified:   src/app/(dashboard)/jobs/page.tsx
+	modified:   src/app/(dashboard)/leads/[id]/page.tsx
+	modified:   src/components/dashboard/nav.ts
+	modified:   src/components/ui/badge.tsx
+	modified:   src/lib/business/applications.ts
+	modified:   src/lib/business/audit.ts
+	modified:   src/lib/business/context.ts
+	modified:   src/lib/business/customers.test.ts
+	modified:   src/lib/business/customers.ts
+	modified:   src/lib/business/documents.ts
+	modified:   src/lib/business/leads.ts
+	deleted:    src/lib/business/opportunities.ts
+	modified:   src/lib/business/tasks.ts
+	modified:   src/lib/business/validation.test.ts
+	modified:   src/lib/business/validation.ts
+	modified:   src/lib/config.ts
+	modified:   supabase/seed.sql
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	src/app/(dashboard)/ai/AiChatPanel.tsx
+	src/app/(dashboard)/ai/SalesAgentPanel.tsx
+	src/app/(dashboard)/ai/WhatsAppSimulatorPanel.tsx
+	src/app/(dashboard)/ai/sales-agent-actions.ts
+	src/app/(dashboard)/ai/whatsapp-simulator-actions.ts
+	src/app/(dashboard)/applications/[id]/
+	src/app/(dashboard)/inbox/[conversationId]/
+	src/app/(dashboard)/jobs/JobForm.tsx
+	src/app/(dashboard)/jobs/[id]/
+	src/app/(dashboard)/jobs/actions.ts
+	src/app/(dashboard)/jobs/new/
+	src/app/api/ai/
+	src/app/api/webhooks/
+	src/lib/ai/
+	src/lib/business/application-events.ts
+	src/lib/business/audit-actor-type.test.ts
+	src/lib/business/conversation-events.ts
+	src/lib/business/conversation-public-state.ts
+	src/lib/business/conversations.test.ts
+	src/lib/business/conversations.ts
+	src/lib/business/inbox.test.ts
+	src/lib/business/inbox.ts
+	src/lib/business/job-documents.ts
+	src/lib/business/jobs.test.ts
+	src/lib/business/jobs.ts
+	src/lib/business/knowledge.test.ts
+	src/lib/business/knowledge.ts
+	src/lib/business/settings.ts
+	src/lib/channels/
+	src/test/fake-supabase.ts
+	supabase/migrations/0003_jobs_abroad.sql
+	supabase/migrations/0004_fix_owner_role_bootstrap.sql
+	supabase/migrations/0005_repair_missing_owner_profile.sql
+	supabase/migrations/0006_ai_core.sql
+	supabase/migrations/0007_ai_sales_agent.sql
+	supabase/migrations/0008_whatsapp_channel.sql
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+git diff --cached (staged changes): (none — nothing staged)
+
+package.json diff (why it's included):
+diff --git a/package.json b/package.json
+index 83f4440..3aeec06 100644
+--- a/package.json
++++ b/package.json
+@@ -14,6 +14,7 @@
+     "@supabase/ssr": "^0.12.7",
+     "@supabase/supabase-js": "^2.116.0",
+     "next": "16.3.5",
++    "openai": "^7.20.0",
+     "react": "19.2.8",
+     "react-dom": "19.2.8",
+     "server-only": "^0.0.1",
+
+package-lock.json diff --stat (why it's included):
+package-lock.json | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+5-7. COUNTS
+------------------------------------------------------------------------------
+Total files included: 127
+Total uncompressed size of included files: 1232071 bytes (1203.2 KB)
+Archive (compressed) size: 382855 bytes (373.9 KB)
+
+8-10. FILES INCLUDED — path, size, phase
+------------------------------------------------------------------------------
+PATH                                                                         SIZE (bytes)  PHASE
+.env.example                                                                         6569  Shared/Cross-phase (env template updated across Phase 3-5H; no real values)
+ARCHITECTURE.md                                                                     35488  Shared/Cross-phase (documentation updated across Phase 2-5H)
+CHANGELOG.md                                                                        59849  Shared/Cross-phase (documentation updated across Phase 2-5H)
+DEVELOPMENT_PROGRESS.md                                                             35587  Shared/Cross-phase (documentation updated across Phase 2-5H)
+README.md                                                                            3279  Shared/Cross-phase (documentation updated across Phase 2-5H)
+SETUP.md                                                                            29673  Shared/Cross-phase (setup instructions; most recent addition is Phase 5H's Meta walkthrough, section 7a)
+package-lock.json                                                                  288543  Shared/Cross-phase (lockfile update for 'openai' + its transitive deps — Phase 3)
+package.json                                                                          759  Shared/Cross-phase (adds 'openai' dependency — Phase 3)
+src/app/(dashboard)/ai/AiChatPanel.tsx                                               7562  Phase 3
+src/app/(dashboard)/ai/SalesAgentPanel.tsx                                          14808  Phase 4
+src/app/(dashboard)/ai/WhatsAppSimulatorPanel.tsx                                   16015  Phase 5D
+src/app/(dashboard)/ai/page.tsx                                                      5978  Shared/Cross-phase (Phase 3 + Phase 4 + Phase 5D — hosts all three /ai tabs)
+src/app/(dashboard)/ai/sales-agent-actions.ts                                        2328  Phase 4
+src/app/(dashboard)/ai/whatsapp-simulator-actions.ts                                 2123  Phase 5D
+src/app/(dashboard)/applications/StatusSelect.tsx                                    1950  Phase 2
+src/app/(dashboard)/applications/[id]/page.tsx                                       7248  Phase 2
+src/app/(dashboard)/applications/actions.ts                                          2529  Phase 2
+src/app/(dashboard)/applications/new/ApplicationForm.tsx                             4133  Phase 2
+src/app/(dashboard)/applications/new/page.tsx                                        2158  Phase 2
+src/app/(dashboard)/applications/page.tsx                                            2911  Phase 2
+src/app/(dashboard)/customers/[id]/page.tsx                                          7785  Shared/Cross-phase (incrementally updated, Phase 2-4)
+src/app/(dashboard)/dashboard/page.tsx                                               4882  Shared/Cross-phase (incrementally updated, Phase 2-4)
+src/app/(dashboard)/documents/new/DocumentRequestForm.tsx                            2463  Shared/Cross-phase (incrementally updated, Phase 2-4)
+src/app/(dashboard)/documents/new/page.tsx                                           1927  Shared/Cross-phase (incrementally updated, Phase 2-4)
+src/app/(dashboard)/documents/page.tsx                                               3062  Shared/Cross-phase (incrementally updated, Phase 2-4)
+src/app/(dashboard)/inbox/[conversationId]/page.tsx                                  8589  Phase 5E
+src/app/(dashboard)/inbox/page.tsx                                                   8261  Phase 5E
+src/app/(dashboard)/jobs/JobForm.tsx                                                12368  Phase 2
+src/app/(dashboard)/jobs/[id]/DocumentRequirementsEditor.tsx                         3611  Phase 2
+src/app/(dashboard)/jobs/[id]/JobStatusActions.tsx                                   2952  Phase 2
+src/app/(dashboard)/jobs/[id]/edit/page.tsx                                          2969  Phase 2
+src/app/(dashboard)/jobs/[id]/page.tsx                                              12092  Phase 2
+src/app/(dashboard)/jobs/actions.ts                                                  7345  Phase 2
+src/app/(dashboard)/jobs/new/page.tsx                                                 598  Phase 2
+src/app/(dashboard)/jobs/page.tsx                                                    7322  Phase 2
+src/app/(dashboard)/leads/[id]/page.tsx                                              7547  Shared/Cross-phase (incrementally updated, Phase 2-4)
+src/app/api/ai/chat/route.test.ts                                                    7018  Phase 3
+src/app/api/ai/chat/route.ts                                                         5563  Phase 3
+src/app/api/ai/sales-agent/route.test.ts                                             9261  Phase 4
+src/app/api/ai/sales-agent/route.ts                                                  9509  Phase 4
+src/app/api/webhooks/whatsapp/route.test.ts                                         12202  Phase 5F
+src/app/api/webhooks/whatsapp/route.ts                                               8376  Phase 5F
+src/components/dashboard/nav.ts                                                      1595  Shared/Cross-phase (UI shared across Phase 2-5E)
+src/components/ui/badge.tsx                                                          2470  Shared/Cross-phase (UI shared across Phase 2-5E)
+src/lib/ai/context.test.ts                                                           3026  Shared/Cross-phase (Phase 3 resolveAiRequestContext + Phase 5C toSystemToolContext, same file)
+src/lib/ai/context.ts                                                                5420  Shared/Cross-phase (Phase 3 resolveAiRequestContext + Phase 5C toSystemToolContext, same file)
+src/lib/ai/core.test.ts                                                              5851  Phase 3
+src/lib/ai/core.ts                                                                   5766  Phase 3
+src/lib/ai/errors.ts                                                                 2755  Phase 3
+src/lib/ai/logging.test.ts                                                           3823  Phase 3
+src/lib/ai/logging.ts                                                                3359  Phase 3
+src/lib/ai/prompts/rules.ts                                                          2649  Phase 3
+src/lib/ai/prompts/sales-agent.ts                                                    4853  Phase 4
+src/lib/ai/prompts/system.ts                                                         1544  Phase 3
+src/lib/ai/provider/dev-mock.test.ts                                                45198  Phase 4
+src/lib/ai/provider/dev-mock.ts                                                     35988  Phase 4
+src/lib/ai/provider/index.test.ts                                                    3636  Phase 3
+src/lib/ai/provider/index.ts                                                         1632  Phase 3
+src/lib/ai/provider/mock.ts                                                          1405  Phase 4
+src/lib/ai/provider/openai.ts                                                        3732  Phase 3
+src/lib/ai/qualification/scoring.test.ts                                             2813  Phase 4
+src/lib/ai/qualification/scoring.ts                                                  4943  Phase 4
+src/lib/ai/rate-limit.test.ts                                                        1547  Phase 3
+src/lib/ai/rate-limit.ts                                                             2048  Phase 3
+src/lib/ai/sales/intents.ts                                                           964  Phase 4
+src/lib/ai/sales/notifications.test.ts                                               3551  Phase 4
+src/lib/ai/sales/notifications.ts                                                    4192  Phase 4
+src/lib/ai/tools/create-lead-persistence.test.ts                                    10768  Phase 4
+src/lib/ai/tools/read-only.test.ts                                                   6929  Phase 3
+src/lib/ai/tools/read-only.ts                                                       17796  Phase 3
+src/lib/ai/tools/registry.test.ts                                                    5104  Phase 4
+src/lib/ai/tools/registry.ts                                                         2724  Phase 4
+src/lib/ai/tools/write.test.ts                                                      15952  Phase 4
+src/lib/ai/tools/write.ts                                                           20651  Phase 4
+src/lib/ai/types.ts                                                                  4412  Phase 3
+src/lib/ai/validation.ts                                                             3434  Phase 3
+src/lib/business/application-events.ts                                               1661  Phase 2
+src/lib/business/applications.ts                                                     7071  Phase 2
+src/lib/business/audit-actor-type.test.ts                                            4453  Phase 5C
+src/lib/business/audit.ts                                                            2887  Phase 5C (actor-type fix)
+src/lib/business/context.ts                                                          4335  Shared/Cross-phase (pre-Phase-2 base, incrementally extended)
+src/lib/business/conversation-events.ts                                              2485  Phase 4
+src/lib/business/conversation-public-state.ts                                        2028  Phase 4
+src/lib/business/conversations.test.ts                                               8779  Shared/Cross-phase (Phase 4 conversation engine + Phase 5A schema + Phase 5C gate + Phase 5D/5F WhatsApp functions, same file)
+src/lib/business/conversations.ts                                                   16160  Shared/Cross-phase (Phase 4 conversation engine + Phase 5A schema + Phase 5C gate + Phase 5D/5F WhatsApp functions, same file)
+src/lib/business/customers.test.ts                                                   7018  Shared/Cross-phase (Phase 2 base + Phase 4/5D phone normalization, find-by-contact)
+src/lib/business/customers.ts                                                        9129  Shared/Cross-phase (Phase 2 base + Phase 4/5D phone normalization, find-by-contact)
+src/lib/business/documents.ts                                                        6124  Phase 2 (document requirements extended for Jobs Abroad)
+src/lib/business/inbox.test.ts                                                       7709  Phase 5E
+src/lib/business/inbox.ts                                                            5928  Phase 5E
+src/lib/business/job-documents.ts                                                    6493  Phase 2
+src/lib/business/jobs.test.ts                                                        4810  Phase 2
+src/lib/business/jobs.ts                                                            22769  Phase 2
+src/lib/business/knowledge.test.ts                                                   5574  Phase 3
+src/lib/business/knowledge.ts                                                        3860  Phase 3
+src/lib/business/leads.ts                                                            8941  Shared/Cross-phase (Phase 2 base + Phase 4 scoring/actor-type)
+src/lib/business/settings.ts                                                         1334  Phase 3
+src/lib/business/tasks.ts                                                            3719  Shared/Cross-phase (Phase 2 base + Phase 4 actor-type)
+src/lib/business/validation.test.ts                                                  6766  Shared/Cross-phase (Phase 2 base + Phase 3/4 extensions)
+src/lib/business/validation.ts                                                       7729  Shared/Cross-phase (Phase 2 base + Phase 3/4 extensions)
+src/lib/channels/whatsapp/business-accounts.test.ts                                  2118  Phase 5F
+src/lib/channels/whatsapp/business-accounts.ts                                       1637  Phase 5F
+src/lib/channels/whatsapp/errors.ts                                                  1735  Phase 5B
+src/lib/channels/whatsapp/orchestrate.test.ts                                       11911  Phase 5D
+src/lib/channels/whatsapp/orchestrate.ts                                            11057  Phase 5D
+src/lib/channels/whatsapp/provider/index.test.ts                                     4456  Phase 5B
+src/lib/channels/whatsapp/provider/index.ts                                          2112  Phase 5B
+src/lib/channels/whatsapp/provider/meta.test.ts                                      7916  Phase 5G
+src/lib/channels/whatsapp/provider/meta.ts                                           7722  Phase 5G
+src/lib/channels/whatsapp/provider/mock.test.ts                                      3727  Phase 5B
+src/lib/channels/whatsapp/provider/mock.ts                                           4373  Phase 5B
+src/lib/channels/whatsapp/types.ts                                                   3001  Phase 5B
+src/lib/channels/whatsapp/webhook-events.test.ts                                     2450  Phase 5F
+src/lib/channels/whatsapp/webhook-events.ts                                          2077  Phase 5F
+src/lib/channels/whatsapp/webhook-payload.test.ts                                    4057  Phase 5F
+src/lib/channels/whatsapp/webhook-payload.ts                                         3762  Phase 5F
+src/lib/channels/whatsapp/webhook-signature.test.ts                                  2415  Phase 5F
+src/lib/channels/whatsapp/webhook-signature.ts                                       1822  Phase 5F
+src/lib/config.ts                                                                    8018  Shared/Cross-phase (Phase 3 AI config + Phase 4 feature flags + Phase 5B/5F/5G WhatsApp config)
+src/test/fake-supabase.ts                                                            4790  Shared/Cross-phase (test infra introduced Phase 3, used by Phase 3-5H tests)
+supabase/migrations/0003_jobs_abroad.sql                                            16083  Phase 2
+supabase/migrations/0004_fix_owner_role_bootstrap.sql                                6177  Phase 2 (infra fix shipped alongside Jobs Abroad)
+supabase/migrations/0005_repair_missing_owner_profile.sql                            7743  Phase 2 (infra fix shipped alongside Jobs Abroad)
+supabase/migrations/0006_ai_core.sql                                                 1943  Phase 3
+supabase/migrations/0007_ai_sales_agent.sql                                          7445  Phase 4
+supabase/migrations/0008_whatsapp_channel.sql                                       13989  Phase 5A
+supabase/seed.sql                                                                   12051  Phase 2 (seed data extended for Jobs Abroad)
+
+11. SECRETS EXCLUDED: CONFIRMED
+------------------------------------------------------------------------------
+Every included file was scanned for OpenAI-style keys (sk-...), JWT-shaped
+tokens (eyJ...), AWS-style access key IDs (AKIA...), and PEM private-key
+headers, in addition to manual inspection of every env/config file's
+actual content. Zero matches.
+No file was excluded for containing a secret — none were found.
+
+12. .env / .env.local EXCLUDED: CONFIRMED
+------------------------------------------------------------------------------
+Neither exists as a candidate in the first place — this workspace has no
+.env.local file at all (confirmed by direct inspection), and .gitignore
+already keeps all .env* files except .env.example out of git's own
+untracked-file listing. .env.example IS included deliberately: it is a
+blank template (verified: every variable has no value after '='), needed
+for someone setting up the transferred code to know what env vars exist.
+
+13. node_modules / .next EXCLUDED: CONFIRMED
+------------------------------------------------------------------------------
+Neither ever appeared as a candidate (both are gitignored, so git status
+never lists them as untracked); the packaging script also carries an
+explicit exclusion pattern for both as a belt-and-suspenders check.
+
+14. 0008_whatsapp_channel.sql INCLUDED: YES
+
+15. package.json INCLUDED: YES
+------------------------------------------------------------------------------
+Reason: the working-tree version adds the 'openai' dependency (see the
+diff above), required by Phase 3's AI Core (src/lib/ai/provider/openai.ts)
+and reused by every later AI-dependent phase (4, 5D). Without this change,
+the transferred source files would fail to build (missing dependency).
+
+16. package-lock.json INCLUDED: YES
+------------------------------------------------------------------------------
+Reason: locks the exact resolved versions of 'openai' and its transitive
+dependencies added alongside package.json (38 lines added, 0 removed —
+see the diff --stat above). Omitting it would let `npm install` resolve
+different transitive versions than what was actually built/tested here.
+
+17. CANDIDATE FILES DELIBERATELY EXCLUDED
+------------------------------------------------------------------------------
+  None. Every modified/untracked candidate file (other than the one
+  deletion, see below) passed the exclusion filter — nothing in this
+  working tree's changes was itself a .env file, a build artifact, or
+  an OS junk file to begin with.
+
+  Also NOT included as file content (it's a deletion, not a file to add):
+  - src/lib/business/opportunities.ts  (DELETED in this workspace relative to HEAD; superseded by
+    src/lib/business/jobs.ts in Phase 2 — remove this file on the Windows
+    side too when applying this package, rather than expecting the zip
+    to contain it)
+

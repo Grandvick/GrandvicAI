@@ -6,17 +6,24 @@ Recruitment, Visa Services, Tours & Safaris). The platform is built to later add
 **Grandvic Motors** and other businesses without a rebuild — see
 [ARCHITECTURE.md](./ARCHITECTURE.md).
 
-> **Status: Phase 0 — Project Foundation.** This is the foundation: project
-> structure, database schema, authentication, and a dashboard shell. Real
-> business features (CRM, jobs, AI, WhatsApp, marketing, etc.) are built
-> phase by phase — see [DEVELOPMENT_PROGRESS.md](./DEVELOPMENT_PROGRESS.md)
-> for the full roadmap and what's done so far.
+> **Status: Phase 4 — AI Sales Agent.**
+> Project foundation, CRM (customers/leads/tasks/documents/notifications),
+> the full Jobs Abroad module (job postings, status workflow, expiry
+> protection, per-job document requirements, and a full candidate
+> recruitment pipeline), the AI Core (a natural-language AI Command Centre
+> at `/ai`), and now a controlled AI Sales Agent / lead-qualification and
+> conversation engine (also at `/ai`, "AI Sales Agent" tab) are built and
+> working — 24 tools total (17 read-only, 7 carefully controlled writes),
+> never raw database access. WhatsApp, marketing automation, and analytics
+> are built phase by phase — see
+> [DEVELOPMENT_PROGRESS.md](./DEVELOPMENT_PROGRESS.md) for the full roadmap
+> and what's done so far.
 
 ## Tech stack
 
 - **Frontend/app**: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4
 - **Database/Auth/Storage**: Supabase (PostgreSQL + Row Level Security)
-- **AI**: OpenAI API (added in Phase 3)
+- **AI**: OpenAI API (Phase 3 — AI Command Centre, tool-calling business assistant)
 - **Automation**: n8n (added in Phase 6)
 - **Hosting**: Vercel
 - **Primary customer channel**: WhatsApp Business Platform / Cloud API (added in Phase 5)
@@ -58,7 +65,8 @@ the app shows a "Setup required" screen instead of crashing — that's expected.
 
 This project is being built in phases, in the order described in
 DEVELOPMENT_PROGRESS.md, on purpose. Each phase is implemented, tested, and
-documented before the next one starts — WhatsApp, social publishing, and
-advanced AI automation come later, once the foundation (this phase),
-CRM, and jobs data are solid. If something looks "missing" right now, it's
-almost certainly scheduled for a specific later phase rather than forgotten.
+documented before the next one starts — the AI Core, WhatsApp, social
+publishing, and advanced AI automation come later, once the foundation,
+CRM, and Jobs Abroad module (this phase) are solid. If something looks
+"missing" right now, it's almost certainly scheduled for a specific later
+phase rather than forgotten.

@@ -2,6 +2,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { DocumentRequestInput } from "./validation";
 import { logActivity } from "./audit";
+import { maybeNotifyDocumentsComplete } from "./job-documents";
 
 export const DOCUMENTS_BUCKET = "documents";
 export const MAX_DOCUMENT_BYTES = 8 * 1024 * 1024; // 8MB
@@ -149,7 +150,7 @@ export async function updateDocumentStatus(
 ): Promise<void> {
   const { data: doc, error: fetchError } = await supabase
     .from("documents")
-    .select("business_id")
+    .select("business_id, application_id")
     .eq("id", documentId)
     .single();
   if (fetchError) throw fetchError;
@@ -175,6 +176,14 @@ export async function updateDocumentStatus(
     objectId: documentId,
     metadata: { status },
   });
+
+  // Phase 2: if this document is tied to a job application and this was the
+  // last mandatory document to be approved, fire the "documents complete"
+  // notification (spec section 15). No-op for Phase 1 general documents
+  // (application_id null) or when the checklist isn't complete yet.
+  if (status === "approved" && doc.application_id) {
+    await maybeNotifyDocumentsComplete(supabase, doc.business_id as string, doc.application_id as string);
+  }
 }
 
 /**

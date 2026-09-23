@@ -6,7 +6,7 @@ import { listLeads } from "@/lib/business/leads";
 import { listTasks } from "@/lib/business/tasks";
 import { listDocuments } from "@/lib/business/documents";
 import { listApplications } from "@/lib/business/applications";
-import { Badge, temperatureTone, statusTone } from "@/components/ui/badge";
+import { Badge, temperatureTone, statusTone, formatStatusLabel } from "@/components/ui/badge";
 import { updateCustomerAction } from "../actions";
 import { CustomerForm } from "../new/CustomerForm";
 
@@ -131,8 +131,10 @@ export default async function CustomerDetailPage({ params }: PageProps<"/custome
               <ul className="space-y-2">
                 {applications.map((a) => (
                   <li key={a.id} className="flex items-center justify-between rounded-lg border border-slate-100 px-3 py-2 text-sm">
-                    <span className="text-slate-900">{a.opportunityTitle || "General application"}</span>
-                    <Badge tone={statusTone(a.status)}>{a.status.replace("_", " ")}</Badge>
+                    <Link href={`/applications/${a.id}`} className="text-slate-900 hover:underline">
+                      {a.opportunityTitle || "General application"}
+                    </Link>
+                    <Badge tone={statusTone(a.status)}>{formatStatusLabel(a.status)}</Badge>
                   </li>
                 ))}
               </ul>
